@@ -29,6 +29,7 @@ public class Producer {
                     value.setCurrentValue(value.getCurrentValue() + (long) (Math.random() * (30 + 30)) - 30);
                     value.setVolume(value.getVolume() + (long) (Math.random() * (200 + 200)) - 200);
                     value.setIndex("nifty");
+                    value.setLastRefreshed(ZonedDateTime.now());
                     producer.send(new ProducerRecord<>("input", key, value));
                     producer.flush();
                     try {
@@ -39,6 +40,7 @@ public class Producer {
                     value.setCurrentValue(value.getCurrentValue() + (long) (Math.random() * (30 + 30)) - 30);
                     value.setVolume(value.getVolume() + (long) (Math.random() * (200 + 200)) - 200);
                     value.setIndex("sensex");
+                    value.setLastRefreshed(ZonedDateTime.now());
                     producer.send(new ProducerRecord<>("input", key, value));
                     producer.flush();
 

@@ -100,7 +100,4 @@ public class Main {
         Producer producer = new Producer();
         producer.getProducer();
     }
-
-
-
 }
