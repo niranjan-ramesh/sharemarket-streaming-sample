@@ -9,6 +9,8 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import java.time.ZonedDateTime;
 import java.util.*;
 
+import static java.lang.Thread.sleep;
+
 public class Producer {
     private KafkaProducer<String, Stock> producer;
     public Producer() {
@@ -20,42 +22,37 @@ public class Producer {
         producer = new KafkaProducer<>(producerProps);
     }
 
-    public void getProducer(String index, Long timeToSleep) {
-        Map<String, Stock> data = getMockData(index);
-//        return () -> {
+    public void getProducer() {
+        Map<String, Stock> data = getMockData();
             while (true) {
                 data.forEach((key, value) -> {
-//                    System.out.println(key);
                     value.setCurrentValue(value.getCurrentValue() + (long) Math.random() * (30 + 30) - 30);
                     value.setVolume(value.getVolume() + (long) Math.random() * (200 + 200) - 200);
                     value.setIndex("nifty");
-                    producer.send(new ProducerRecord<>("input", key, value), (metadata, exception) -> {
-//                        System.out.println("Partition: " + metadata.partition());
-//                        System.out.println("Offset: " + metadata.offset());
-                    });
+                    producer.send(new ProducerRecord<>("input", key, value));
                     producer.flush();
+                    try {
+                        sleep(2000L);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     value.setCurrentValue(value.getCurrentValue() + (long) Math.random() * (30 + 30) - 30);
                     value.setVolume(value.getVolume() + (long) Math.random() * (200 + 200) - 200);
                     value.setIndex("sensex");
-                    producer.send(new ProducerRecord<>("input", key, value), (metadata, exception) -> {
-//                        System.out.println("Partition: " + metadata.partition());
-//                        System.out.println("Offset: " + metadata.offset());
-                    });
+                    producer.send(new ProducerRecord<>("input", key, value));
                     producer.flush();
 
 
                 });
-//                try {
-////                    sleep(timeToSleep);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                break;
+               try {
+                   sleep(5000L);
+               } catch (InterruptedException e) {
+                   e.printStackTrace();
+               }
             }
-//        };
     }
 
-    private Map<String, Stock> getMockData(String index) {
+    private Map<String, Stock> getMockData() {
         Map<String, Stock> stocks = new HashMap<>();
 
         List<String> symbols = Arrays.asList("MSFT", "AMZN", "UBER", "ABNB", "NVDA", "NUE", "IT", "EXR", "GOOGL", "AAPL");
@@ -67,11 +64,8 @@ public class Producer {
             stock.setVolume(50 + (long) (Math.random() * (500 - 50)));
             stock.setName(names.get(i));
             stock.setCurrentValue(300 + (long) (Math.random() * (10000 - 300)));
-            stock.setIndex(index);
             stocks.put(symbols.get(i), stock);
         }
-        System.out.println("index: "+index);
-        System.out.println(stocks);
 
         return stocks;
     }

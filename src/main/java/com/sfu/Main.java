@@ -16,8 +16,6 @@ import org.apache.kafka.streams.state.WindowStore;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class Main {
 
@@ -94,21 +92,13 @@ public class Main {
             }
         );
 
-        aggTable = aggTable.mapValues((agg) -> {
-            System.out.println("Agg: "+agg.getName());
-            return agg;
-        });
-
         aggTable.toStream().to("output-chart", Produced.with(Serdes.String(), aggSerde));
 
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
         streams.start();
 
-        Executor niftyExecutor = Executors.newSingleThreadExecutor();
-        Executor sensexExecutor = Executors.newSingleThreadExecutor();
         Producer producer = new Producer();
-        producer.getProducer("nifty", 500L);
-//        sensexExecutor.execute(producer.getProducer("sensex", 1000L));
+        producer.getProducer();
     }
 
 
