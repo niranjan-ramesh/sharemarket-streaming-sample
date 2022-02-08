@@ -31,8 +31,8 @@ public class Main {
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "ws-stock-application-7");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
-
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+
         KStream<String, Stock> input = builder.stream("input", Consumed.with(Serdes.String(), stockSerde));
 
         Map<String, KStream<String, Stock>> splitBranches = input.split(Named.as("branch-"))
@@ -51,8 +51,8 @@ public class Main {
         };
 
         ValueMapper<AggStock, AggStock> aggregrateMapper = (value -> {
-            value.setAverageValue(value.getTotalValue() / value.getCount());
-            value.setAverageVolume(value.getTotalVolume() / value.getCount());
+            value.setAverageValue((long)value.getTotalValue() / value.getCount());
+            value.setAverageVolume((long)value.getTotalVolume() / value.getCount());
             return value;
         });
 

@@ -26,8 +26,8 @@ public class Producer {
         Map<String, Stock> data = getMockData();
             while (true) {
                 data.forEach((key, value) -> {
-                    value.setCurrentValue(value.getCurrentValue() + (long) Math.random() * (30 + 30) - 30);
-                    value.setVolume(value.getVolume() + (long) Math.random() * (200 + 200) - 200);
+                    value.setCurrentValue(value.getCurrentValue() + (long) (Math.random() * (30 + 30)) - 30);
+                    value.setVolume(value.getVolume() + (long) (Math.random() * (200 + 200)) - 200);
                     value.setIndex("nifty");
                     producer.send(new ProducerRecord<>("input", key, value));
                     producer.flush();
@@ -36,8 +36,8 @@ public class Producer {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    value.setCurrentValue(value.getCurrentValue() + (long) Math.random() * (30 + 30) - 30);
-                    value.setVolume(value.getVolume() + (long) Math.random() * (200 + 200) - 200);
+                    value.setCurrentValue(value.getCurrentValue() + (long) (Math.random() * (30 + 30)) - 30);
+                    value.setVolume(value.getVolume() + (long) (Math.random() * (200 + 200)) - 200);
                     value.setIndex("sensex");
                     producer.send(new ProducerRecord<>("input", key, value));
                     producer.flush();
