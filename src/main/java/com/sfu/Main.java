@@ -57,7 +57,7 @@ public class Main {
         });
 
         KTable<Windowed<String>, AggStock> sensexAgg = sensex.groupByKey()
-                .windowedBy(TimeWindows.ofSizeWithNoGrace(Duration.ofMinutes(15l)))
+                .windowedBy(TimeWindows.ofSizeWithNoGrace(Duration.ofSeconds(30l)))
                 .aggregate(() -> (new AggStock()),
                         stockAggregator,
                         Materialized.<String, AggStock, WindowStore<Bytes,byte[]>>as("agg-sensex-state-store").withValueSerde(aggStockSerde))
@@ -92,7 +92,7 @@ public class Main {
             }
         );
 
-        aggTable.toStream().to("output-chart", Produced.with(Serdes.String(), aggSerde));
+        aggTable.toStream().to("output", Produced.with(Serdes.String(), aggSerde));
 
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
         streams.start();

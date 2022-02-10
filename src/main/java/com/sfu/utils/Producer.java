@@ -27,7 +27,7 @@ public class Producer {
             while (true) {
                 data.forEach((key, value) -> {
                     value.setCurrentValue(value.getCurrentValue() + (long) (Math.random() * (30 + 30)) - 30);
-                    value.setVolume(value.getVolume() + (long) (Math.random() * (200 + 200)) - 200);
+                    value.setVolume(value.getVolume() + (long) (Math.random() * (200 - 20)) + 20);
                     value.setIndex("nifty");
                     value.setLastRefreshed(ZonedDateTime.now());
                     producer.send(new ProducerRecord<>("input", key, value));
@@ -37,8 +37,8 @@ public class Producer {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    value.setCurrentValue(value.getCurrentValue() + (long) (Math.random() * (30 + 30)) - 30);
-                    value.setVolume(value.getVolume() + (long) (Math.random() * (200 + 200)) - 200);
+                    value.setCurrentValue(value.getCurrentValue() + (long) (Math.random() * (30 - 10)) + 10);
+                    value.setVolume(value.getVolume() + (long) (Math.random() * (200 - 20)) + 20);
                     value.setIndex("sensex");
                     value.setLastRefreshed(ZonedDateTime.now());
                     producer.send(new ProducerRecord<>("input", key, value));

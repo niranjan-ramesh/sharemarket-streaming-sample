@@ -1,3 +1,4 @@
+import time
 from kafka import KafkaConsumer
 from threading import Thread
 from os import path
@@ -33,6 +34,7 @@ def animate(fig):
 consumer_thread = Thread(target=consumer)
 consumer_thread.start()
 
+time.sleep(5)
 fig = plt.figure()
-line_chart = anim.FuncAnimation(fig, animate, interval=5000)
+line_chart = anim.FuncAnimation(fig, animate, interval=3000)
 plt.show()
